@@ -11,7 +11,7 @@ My team is contemplating the development of an innovative Air Quality Map Applic
 ## API Documentation
 We are using the IQAir API to fetch the air quality data. The API documentation can be found [here](https://api-docs.iqair.com/).
 
-![API Test Screenshot](<link-to-your-screenshot>)  
+![API Test Screenshot](images/APItesting.png)  
 *Above is a screenshot of testing the IQAir API using Postman.*
 
 ## Example Output
