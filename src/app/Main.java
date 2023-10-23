@@ -9,7 +9,7 @@ public class Main {
         MediaType mediaType = MediaType.parse("text/plain");
         RequestBody body = RequestBody.create(mediaType, "");
         Request request = new Request.Builder()
-                .url("https://api.airvisual.com/v2/nearest_city?key=788d7141-476d-41bd-8acd-17a3f9ff5d55")
+                .url("http://api.airvisual.com/v2/city?city=Los Angeles&state=California&country=USA&key=788d7141-476d-41bd-8acd-17a3f9ff5d55")
                 .build();
         Response response = client.newCall(request).execute();
         System.out.println(response.body().string());
