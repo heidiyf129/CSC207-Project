@@ -13,6 +13,15 @@ public class AnalyzeAirQuality {
         } else if (aqi <= 100) {
             category = "Moderate";
             tips = "快死了";
+        } else if (aqi <= 150) {
+            category = "Unhealthy for sensitive groups";
+            tips = "lalala";
+        } else if (aqi <= 200) {
+            category = "Unhealthy";
+            tips = "ohohoho";
+        } else if (aqi <= 300) {
+            category = "Very unhealthy";
+            tips = "快死了";
         }
         //... Complete for all possible AQI ranges
         else {
