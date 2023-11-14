@@ -1,4 +1,3 @@
-// entity/AirQuality.java
 package entity;
 
 public class AirQuality {

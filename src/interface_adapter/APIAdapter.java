@@ -23,6 +23,11 @@ public class APIAdapter implements data_access.AirQualityDao {
     private static final MediaType MEDIA_TYPE = MediaType.parse("text/plain");
 
     @Override
+    public Integer getAqi(String city, String state, String country) {
+        return null;
+    }
+
+    @Override
     public String fetchAirQualityData(String city, String state, String country) {
         OkHttpClient client = new OkHttpClient().newBuilder().build();
         String apiUrl = String.format(API_URL_TEMPLATE, city, state, country);
