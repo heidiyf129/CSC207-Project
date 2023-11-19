@@ -70,6 +70,26 @@ public class AnalyzeAirQuality {
         return formattedTips.toString().trim(); // Trim trailing spaces
     }
 
+    public String analyze(AirQuality airQuality) {
+        int aqi = airQuality.getAqi();
+        String category;
+        String tips;
+
+        if (aqi <= 50) {
+            category = "Good";
+            tips = getAirQuality(aqi);
+        } else if (aqi <= 100) {
+            category = "Moderate";
+            tips = getAirQuality(aqi);
+        }
+        //... Complete for all possible AQI ranges
+        else {
+            category = "Hazardous";
+            tips = getAirQuality(aqi);
+        }
+        tips = formatTipsForDisplay(tips);
+        return category + "\n\nSuggestions: \n" + tips;
+    }
 
 }
 
