@@ -1,11 +1,14 @@
 package app;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.List;
+
 import data_access.LocationDaoImpl;
 import entity.AirQuality;
-import entity.Location;
 import interface_adapter.AirQualityController;
 import interface_adapter.APIAdapter;
 import interface_adapter.LocationController;
@@ -14,199 +17,152 @@ import use_case.AnalyzeAirQuality;
 public class Main {
 
     private JFrame frame;
-    private JPanel panel;
-    private JTextField countryTextField, stateTextField, cityTextField;
-    private JLabel aqiLabel1, aqiLabel2;
-    private JTextArea suggestionArea1, suggestionArea2;
+    private JPanel panel, suggestionPanel;
     private LocationController locationController;
+    private AnalyzeAirQuality analyzer;
+    private List<String> locations;
+    private List<Integer> aqis;
 
     public static void main(String[] args) {
+        try {
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         SwingUtilities.invokeLater(() -> new Main().displayGUI());
     }
 
     public Main() {
         locationController = new LocationController(new LocationDaoImpl());
+        analyzer = new AnalyzeAirQuality();
+        locations = new ArrayList<>();
+        aqis = new ArrayList<>();
     }
 
     public void displayGUI() {
-        frame = new JFrame("Innovative Air Quality Map ;)");
+        frame = new JFrame("哈哈");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(650, 400);
+        frame.setSize(700, 500);
 
         panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+        panel.setBackground(Color.WHITE); // Light Pink background
 
-        setupInputFields();
         setupButtons();
         setupResultArea();
 
-        frame.add(new JScrollPane(panel));
+        frame.add(panel);
         frame.setVisible(true);
     }
 
-    private void setupInputFields() {
-        countryTextField = new JTextField(15);
-        stateTextField = new JTextField(15);
-        cityTextField = new JTextField(15);
-
-        panel.add(new JLabel("Enter country:"));
-        panel.add(countryTextField);
-        panel.add(new JLabel("Enter state:"));
-        panel.add(stateTextField);
-        panel.add(new JLabel("Enter city name:"));
-        panel.add(cityTextField);
-    }
-
     private void setupButtons() {
-        JButton checkAqiButton = new JButton("Check AQI");
         JButton addLocationButton = new JButton("Add Location");
-
-        checkAqiButton.addActionListener(this::handleCheckAqiAction);
-        addLocationButton.addActionListener(e -> openSecondLocationDialog());
-
-        panel.add(checkAqiButton);
+        styleButton(addLocationButton);
+        addLocationButton.addActionListener(this::handleAddLocationAction);
         panel.add(addLocationButton);
     }
 
+    private void styleButton(JButton button) {
+        button.setBackground(new Color(163, 128, 170));
+        button.setForeground(Color.WHITE); // White text
+        button.setFocusPainted(false);
+        button.setFont(new Font("Times New Roman", Font.BOLD, 15));
+        button.setBorder(new EmptyBorder(10, 15, 10, 15)); // Padding
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Change cursor on hover
+    }
+
     private void setupResultArea() {
-        aqiLabel1 = new JLabel("First Location AQI: ");
-        suggestionArea1 = new JTextArea(2, 20);
-        suggestionArea1.setEditable(false);
+        suggestionPanel = new JPanel();
+        suggestionPanel.setLayout(new BoxLayout(suggestionPanel, BoxLayout.Y_AXIS));
+        suggestionPanel.setBackground(new Color(230, 230, 250)); // Light Lavender background
 
-        aqiLabel2 = new JLabel("Second Location AQI: ");
-        suggestionArea2 = new JTextArea(2, 20);
-        suggestionArea2.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(suggestionPanel,
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        panel.add(aqiLabel1);
-        panel.add(suggestionArea1);
-        panel.add(aqiLabel2);
-        panel.add(suggestionArea2);
-    }
-
-    private void handleCheckAqiAction(ActionEvent e) {
-        String city = cityTextField.getText().trim();
-        String state = stateTextField.getText().trim();
-        String country = countryTextField.getText().trim();
-
-        if (city.isEmpty() || state.isEmpty() || country.isEmpty()) {
-            JOptionPane.showMessageDialog(frame, "Please fill in all the details.", "Input Error", JOptionPane.ERROR_MESSAGE);
-        } else {
-            AirQualityController aqController = new AirQualityController(new APIAdapter());
-            try {
-                int aqiValue = fetchAQI(city, state, country); // Assuming fetchAQI returns an int directly
-                aqiLabel1.setText("AQI for " + city + ": " + aqiValue); // Change resultLabel to aqiLabel1
-                AnalyzeAirQuality analyzer = new AnalyzeAirQuality();
-                AirQuality airQuality = new AirQuality(aqiValue);
-                String analysis = analyzer.analyze(airQuality);
-                suggestionArea1.setText(analysis); // Assuming you want to display the analysis in suggestionArea1
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(frame, "Failed to fetch AQI data: " + ex.getMessage(), "API Error", JOptionPane.ERROR_MESSAGE);
-            }
-        }
-    }
-
-
-    private void openSecondLocationDialog() {
-        JDialog secondLocationDialog = new JDialog(frame, "Add Second Location", true);
-        secondLocationDialog.setLayout(new FlowLayout());
-        secondLocationDialog.setSize(300, 200);
-
-        JTextField city2TextField = new JTextField(10);
-        JTextField state2TextField = new JTextField(10);
-        JTextField country2TextField = new JTextField(10);
-        JButton compareButton = new JButton("Compare");
-
-        secondLocationDialog.add(new JLabel("City:"));
-        secondLocationDialog.add(city2TextField);
-        secondLocationDialog.add(new JLabel("State:"));
-        secondLocationDialog.add(state2TextField);
-        secondLocationDialog.add(new JLabel("Country:"));
-        secondLocationDialog.add(country2TextField);
-        secondLocationDialog.add(compareButton);
-
-        compareButton.addActionListener(e -> {
-            compareLocations(cityTextField.getText(), stateTextField.getText(), countryTextField.getText(),
-                    city2TextField.getText(), state2TextField.getText(), country2TextField.getText());
-            secondLocationDialog.dispose();
-        });
-
-        secondLocationDialog.setVisible(true);
-    }
-
-    private void compareLocations(String city1, String state1, String country1, String city2, String state2, String country2) {
-        // Assuming fetchAQI returns an integer AQI value or -1 in case of error
-        int aqi1 = fetchAQI(city1, state1, country1);
-        int aqi2 = fetchAQI(city2, state2, country2);
-
-        AnalyzeAirQuality analyzer = new AnalyzeAirQuality();
-
-        // Update the labels and text areas with the AQI values and suggestions
-        SwingUtilities.invokeLater(() -> {
-            aqiLabel1.setText("First Location AQI: " + (aqi1 >= 0 ? aqi1 : "Error fetching AQI"));
-            suggestionArea1.setText(aqi1 >= 0 ? analyzer.analyze(new AirQuality(aqi1)) : "Error fetching AQI");
-
-            aqiLabel2.setText("Second Location AQI: " + (aqi2 >= 0 ? aqi2 : "Error fetching AQI"));
-            suggestionArea2.setText(aqi2 >= 0 ? analyzer.analyze(new AirQuality(aqi2)) : "Error fetching AQI");
-        });
+        panel.add(scrollPane);
     }
 
     private void handleAddLocationAction(ActionEvent e) {
-        String city = cityTextField.getText().trim();
-        String state = stateTextField.getText().trim();
-        String country = countryTextField.getText().trim();
-
-        if (!city.isEmpty() && !state.isEmpty() && !country.isEmpty()) {
-            Location newLocation = new Location(city, state, country);
-            locationController.addLocation(newLocation);
-            JOptionPane.showMessageDialog(frame, "Location added successfully!");
-        } else {
-            JOptionPane.showMessageDialog(frame, "Please fill in all the fields.");
-        }
+        openLocationInputDialog();
     }
 
-    private void openAqiComparisonDialog() {
-        JDialog comparisonDialog = new JDialog(frame, "Compare AQI", true);
-        comparisonDialog.setLayout(new FlowLayout());
-        comparisonDialog.setSize(300, 200);
+    private void openLocationInputDialog() {
+        JDialog inputDialog = new JDialog(frame, "Enter Location", true);
+        inputDialog.setLayout(new FlowLayout());
+        inputDialog.setSize(300, 200);
 
-        JTextField city2TextField = new JTextField(10);
-        JTextField state2TextField = new JTextField(10);
-        JTextField country2TextField = new JTextField(10);
-        JButton compareButton = new JButton("Compare");
+        JTextField cityTextField = new JTextField(10);
+        JTextField stateTextField = new JTextField(10);
+        JTextField countryTextField = new JTextField(10);
+        JButton submitButton = new JButton("Submit");
+        styleButton(submitButton);
 
-        comparisonDialog.add(new JLabel("City 2:"));
-        comparisonDialog.add(city2TextField);
-        comparisonDialog.add(new JLabel("State 2:"));
-        comparisonDialog.add(state2TextField);
-        comparisonDialog.add(new JLabel("Country 2:"));
-        comparisonDialog.add(country2TextField);
-        comparisonDialog.add(compareButton);
+        inputDialog.add(new JLabel("City:"));
+        inputDialog.add(cityTextField);
+        inputDialog.add(new JLabel("State:"));
+        inputDialog.add(stateTextField);
+        inputDialog.add(new JLabel("Country:"));
+        inputDialog.add(countryTextField);
+        inputDialog.add(submitButton);
 
-        compareButton.addActionListener(e -> {
-            // Fetch AQI for both locations
-            int aqi1 = fetchAQI(cityTextField.getText(), stateTextField.getText(), countryTextField.getText());
-            int aqi2 = fetchAQI(city2TextField.getText(), state2TextField.getText(), country2TextField.getText());
-            aqiLabel1.setText("First Location AQI: " + (aqi1 >= 0 ? aqi1 : "Error fetching AQI"));
-            aqiLabel2.setText("Second Location AQI: " + (aqi2 >= 0 ? aqi2 : "Error fetching AQI"));
-            comparisonDialog.dispose();
+        submitButton.addActionListener(e -> {
+            String city = cityTextField.getText().trim();
+            String state = stateTextField.getText().trim();
+            String country = countryTextField.getText().trim();
+
+            if (!city.isEmpty() && !state.isEmpty() && !country.isEmpty()) {
+                int aqiValue = fetchAQI(city, state, country);
+                locations.add(String.format("%s, %s, %s", city, state, country));
+                aqis.add(aqiValue);
+                updateSuggestionArea();
+            } else {
+                JOptionPane.showMessageDialog(inputDialog, "Please fill in all the details.", "Input Error", JOptionPane.ERROR_MESSAGE);
+            }
+            inputDialog.dispose();
         });
 
-        comparisonDialog.setVisible(true);
+        inputDialog.setVisible(true);
+    }
+
+    private void updateSuggestionArea() {
+        suggestionPanel.removeAll();
+
+        for (int i = 0; i < locations.size(); i++) {
+            String location = locations.get(i);
+            int aqi = aqis.get(i);
+
+            JLabel locationLabel = new JLabel(location + " - AQI: " + aqi);
+            JButton suggestionButton = new JButton("Suggestion");
+            styleButton(suggestionButton);
+            int index = i;
+            suggestionButton.addActionListener(e -> showSuggestion(index));
+
+            JPanel locationPanel = new JPanel();
+            locationPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+            locationPanel.setBackground(new Color(230, 230, 250)); // Light Pink background
+            locationPanel.add(locationLabel);
+            locationPanel.add(suggestionButton);
+
+            suggestionPanel.add(locationPanel);
+        }
+
+        suggestionPanel.revalidate();
+        suggestionPanel.repaint();
+    }
+
+    private void showSuggestion(int index) {
+        if (index >= 0 && index < locations.size()) {
+            int aqi = aqis.get(index);
+            AirQuality airQuality = new AirQuality(aqi);
+            String analysis = analyzer.analyze(airQuality);
+            JOptionPane.showMessageDialog(frame, analysis, "Suggestion for " + locations.get(index), JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 
     private int fetchAQI(String city, String state, String country) {
-        // Placeholder method to fetch AQI for given location
-        // Replace with actual logic to fetch AQI using AirQualityController
         AirQualityController airQualityController = new AirQualityController(new APIAdapter());
-        try {
-            return Integer.parseInt(airQualityController.fetchAirQuality(city, state, country));
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(frame, "Error parsing AQI value for " + city, "Error", JOptionPane.ERROR_MESSAGE);
-            return -1;
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(frame, "Error fetching AQI for " + city, "Error", JOptionPane.ERROR_MESSAGE);
-            return -1;
-        }
+        return Integer.parseInt(airQualityController.fetchAirQuality(city, state, country));
     }
 }
-
