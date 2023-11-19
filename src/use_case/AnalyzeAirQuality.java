@@ -52,5 +52,24 @@ public class AnalyzeAirQuality {
         return "Unable to retrieve tips";
     }
 
+    private String formatTipsForDisplay(String tips) {
+        StringBuilder formattedTips = new StringBuilder();
+        String[] words = tips.split(" ");
+        int currentLineLength = 0;
+
+        for (String word : words) {
+            // Check if adding the next word exceeds the MAX_WIDTH
+            if (currentLineLength + word.length() > MAX_WIDTH) {
+                formattedTips.append("\n"); // Start a new line
+                currentLineLength = 0;
+            }
+            formattedTips.append(word).append(" ");
+            currentLineLength += word.length() + 1; // +1 for the space
+        }
+
+        return formattedTips.toString().trim(); // Trim trailing spaces
+    }
+
+
 }
 
