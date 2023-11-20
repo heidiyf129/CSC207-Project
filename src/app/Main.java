@@ -19,9 +19,9 @@ public class Main {
     private JFrame frame;
     private JPanel panel, suggestionPanel;
     private LocationController locationController;
-    private AnalyzeAirQuality analyzer;
-    private List<String> locations;
-    private List<Integer> aqis;
+    private final AnalyzeAirQuality analyzer;
+    private final List<String> locations;
+    private final List<Integer> aqis;
 
     public static void main(String[] args) {
         try {
@@ -40,13 +40,13 @@ public class Main {
     }
 
     public void displayGUI() {
-        frame = new JFrame("哈哈");
+        frame = new JFrame("哈哈:)");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(700, 500);
+        frame.setSize(400, 500);
 
         panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
-        panel.setBackground(Color.WHITE); // Light Pink background
+        panel.setBackground(Color.WHITE);
 
         setupButtons();
         setupResultArea();
@@ -56,10 +56,21 @@ public class Main {
     }
 
     private void setupButtons() {
+        JPanel centerPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        gbc.gridx = 0; // Column
+        gbc.gridy = 0; // Row
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.anchor = GridBagConstraints.CENTER;
+
         JButton addLocationButton = new JButton("Add Location");
         styleButton(addLocationButton);
         addLocationButton.addActionListener(this::handleAddLocationAction);
-        panel.add(addLocationButton);
+        centerPanel.add(addLocationButton, gbc);
+        centerPanel.setBackground(Color.WHITE);
+        panel.setLayout(new BorderLayout());
+        panel.add(centerPanel, BorderLayout.NORTH);
     }
 
     private void styleButton(JButton button) {
@@ -90,23 +101,32 @@ public class Main {
 
     private void openLocationInputDialog() {
         JDialog inputDialog = new JDialog(frame, "Enter Location", true);
-        inputDialog.setLayout(new FlowLayout());
-        inputDialog.setSize(300, 200);
+        inputDialog.setLayout(new BoxLayout(inputDialog.getContentPane(), BoxLayout.Y_AXIS));
 
         JTextField cityTextField = new JTextField(10);
         JTextField stateTextField = new JTextField(10);
         JTextField countryTextField = new JTextField(10);
+
+        // Add the Country label and text field
+        JPanel countryPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        countryPanel.add(new JLabel("Country:"));
+        countryPanel.add(countryTextField);
+        inputDialog.add(countryPanel);
+
+        // Add the State label and text field
+        JPanel statePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        statePanel.add(new JLabel("    State:"));
+        statePanel.add(stateTextField);
+        inputDialog.add(statePanel);
+
+        // Add the City label and text field
+        JPanel cityPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        cityPanel.add(new JLabel("     City:"));
+        cityPanel.add(cityTextField);
+        inputDialog.add(cityPanel);
+
         JButton submitButton = new JButton("Submit");
         styleButton(submitButton);
-
-        inputDialog.add(new JLabel("City:"));
-        inputDialog.add(cityTextField);
-        inputDialog.add(new JLabel("State:"));
-        inputDialog.add(stateTextField);
-        inputDialog.add(new JLabel("Country:"));
-        inputDialog.add(countryTextField);
-        inputDialog.add(submitButton);
-
         submitButton.addActionListener(e -> {
             String city = cityTextField.getText().trim();
             String state = stateTextField.getText().trim();
@@ -123,8 +143,16 @@ public class Main {
             inputDialog.dispose();
         });
 
+        inputDialog.add(submitButton);
+        inputDialog.pack(); // Resize dialog to fit the components
+        inputDialog.setLocationRelativeTo(frame); // Center dialog relative to the main frame
         inputDialog.setVisible(true);
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonPanel.add(submitButton);
+        inputDialog.add(buttonPanel);
     }
+
 
     private void updateSuggestionArea() {
         suggestionPanel.removeAll();
@@ -141,7 +169,7 @@ public class Main {
 
             JPanel locationPanel = new JPanel();
             locationPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-            locationPanel.setBackground(new Color(230, 230, 250)); // Light Pink background
+            locationPanel.setBackground(new Color(230, 230, 250));
             locationPanel.add(locationLabel);
             locationPanel.add(suggestionButton);
 
