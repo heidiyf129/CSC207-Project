@@ -80,15 +80,21 @@ public class AnalyzeAirQuality {
         } else if (aqi <= 100) {
             category = "Moderate";
             tips = getAirQuality(aqi);
-        }
-
-        else {
+        } else if (aqi <= 150) {
+            category = "Unhealthy for sensitive groups";
+            tips = getAirQuality(aqi);
+        } else if (aqi <= 200) {
+            category = "Unhealthy";
+            tips = getAirQuality(aqi);
+        } else if (aqi <= 300) {
+            category = "Very unhealthy";
+            tips = getAirQuality(aqi);
+        } else {
             category = "Hazardous";
             tips = getAirQuality(aqi);
         }
         tips = formatTipsForDisplay(tips);
         return category + "\n\nSuggestions: \n" + tips;
     }
-
 }
 
