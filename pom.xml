@@ -9,8 +9,8 @@
 
     <repositories>
         <repository>
-            <id>openjfx</id>
-            <url>https://repo1.maven.org/maven2/org/openjfx/</url>
+            <id>maven-central</id>
+            <url>https://repo.maven.apache.org/maven2</url>
         </repository>
     </repositories>
 
@@ -31,13 +31,12 @@
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
-            <version>17</version>
+            <version>17</version> <!-- Use the version that is compatible with your project -->
         </dependency>
-
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
-            <version>17</version>
+            <version>17</version> <!-- Use the version that is compatible with your project -->
         </dependency>
 
     </dependencies>
