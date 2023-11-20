@@ -14,12 +14,12 @@ public class AnalyzeAirQuality {
 
     public String getAirQuality(int aqi) {
         OkHttpClient client = new OkHttpClient().newBuilder()
-                .connectTimeout(100, TimeUnit.SECONDS) // Increase connection timeout
-                .readTimeout(100, TimeUnit.SECONDS)    // Increase read timeout
-                .writeTimeout(100, TimeUnit.SECONDS)   // Increase write timeout
+                .connectTimeout(100, TimeUnit.SECONDS)
+                .readTimeout(100, TimeUnit.SECONDS)
+                .writeTimeout(100, TimeUnit.SECONDS)
                 .build();;
 
-        String prompt = "Provide tips when being outside with air quality index" + aqi + ", give your response in 250 characters, give tips in full sentences, not in bullet form or numbered, the tone of the message should sound professional";;
+        String prompt = "Provide tips/suggestions when being outside with air quality index" + aqi + ", give your response in 250 characters, give tips in full sentences only, NOT in bullet form, NOT in numbered form, the tone of the message should sound professional and helping";;
         String apiKey = "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";
 
         String jsonPayload = "{\"model\": \"gpt-3.5-turbo\", \"messages\": [{\"role\": \"system\", \"content\": \"You are a helpful assistant.\"}, {\"role\": \"user\", \"content\": \"" + prompt + "\"}]}";
@@ -58,16 +58,15 @@ public class AnalyzeAirQuality {
         int currentLineLength = 0;
 
         for (String word : words) {
-            // Check if adding the next word exceeds the MAX_WIDTH
             if (currentLineLength + word.length() > MAX_WIDTH) {
-                formattedTips.append("\n"); // Start a new line
+                formattedTips.append("\n");
                 currentLineLength = 0;
             }
             formattedTips.append(word).append(" ");
-            currentLineLength += word.length() + 1; // +1 for the space
+            currentLineLength += word.length() + 1;
         }
 
-        return formattedTips.toString().trim(); // Trim trailing spaces
+        return formattedTips.toString().trim();
     }
 
     public String analyze(AirQuality airQuality) {
@@ -82,7 +81,7 @@ public class AnalyzeAirQuality {
             category = "Moderate";
             tips = getAirQuality(aqi);
         }
-        //... Complete for all possible AQI ranges
+
         else {
             category = "Hazardous";
             tips = getAirQuality(aqi);
