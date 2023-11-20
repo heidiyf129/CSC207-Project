@@ -7,7 +7,9 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import java.util.concurrent.TimeUnit;
+import java.io.IOException;
 import org.json.JSONObject;
+
 public class AnalyzeAirQuality {
     private static final String API_URL = "https://api.openai.com/v1/chat/completions";
     private static final int MAX_WIDTH = 95;
@@ -17,10 +19,10 @@ public class AnalyzeAirQuality {
                 .connectTimeout(100, TimeUnit.SECONDS)
                 .readTimeout(100, TimeUnit.SECONDS)
                 .writeTimeout(100, TimeUnit.SECONDS)
-                .build();;
+                .build();
 
-        String prompt = "Provide tips/suggestions when being outside with air quality index" + aqi + ", give your response in 250 characters, give tips in full sentences only, NOT in bullet form, NOT in numbered form, the tone of the message should sound professional and helping";;
-        String apiKey = "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";
+        String prompt = "Provide tips/suggestions when being outside with air quality index " + aqi + ", give your response in 250 characters, give tips in full sentences only, NOT in bullet form, NOT in numbered form, the tone of the message should sound professional and helping";
+        String apiKey = "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";
 
         String jsonPayload = "{\"model\": \"gpt-3.5-turbo\", \"messages\": [{\"role\": \"system\", \"content\": \"You are a helpful assistant.\"}, {\"role\": \"user\", \"content\": \"" + prompt + "\"}]}";
 
@@ -34,22 +36,24 @@ public class AnalyzeAirQuality {
                 .addHeader("Content-Type", "application/json")
                 .build();
 
-        try {
-            Response response = client.newCall(request).execute();
+        try (Response response = client.newCall(request).execute()) {
+            if (!response.isSuccessful()) {
+                throw new IOException("Unexpected code " + response);
+            }
+
             String responseBody = response.body().string();
 
-            // Parse the JSON response
             JSONObject jsonObject = new JSONObject(responseBody);
             String content = jsonObject.getJSONArray("choices")
                     .getJSONObject(0)
                     .getJSONObject("message")
                     .getString("content");
 
-            return content; // Return only the content field
+            return content;
         } catch (Exception e) {
             e.printStackTrace();
+            return "Unable to retrieve tips: " + e.getMessage();
         }
-        return "Unable to retrieve tips";
     }
 
     private String formatTipsForDisplay(String tips) {
