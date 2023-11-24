@@ -49,33 +49,82 @@ public class Main {
         signInButton.addActionListener(e -> displaySignInView());
         loginButton.addActionListener(e -> displayLoginView());
 
+        // Create a slider for adjusting button size
+        JSlider sizeSlider = new JSlider(JSlider.HORIZONTAL, 10, 20, 15);
+        sizeSlider.setMajorTickSpacing(1);
+        sizeSlider.setPaintTicks(true);
+        sizeSlider.setPaintLabels(false);
+
+        // Add change listener to the slider
+        sizeSlider.addChangeListener(e -> {
+            int sliderValue = sizeSlider.getValue();
+            // Adjust the size of the buttons based on the slider value
+            signInButton.setFont(new Font("SansSerif", Font.PLAIN, sliderValue));
+            loginButton.setFont(new Font("SansSerif", Font.PLAIN, sliderValue));
+        });
+
         mainFrame.add(signInButton);
         mainFrame.add(loginButton);
+        mainFrame.add(sizeSlider); // Add the slider to the frame
 
-        mainFrame.setLocationRelativeTo(null);  // Center the main window
+        mainFrame.setLocationRelativeTo(null); // Center the main window
         mainFrame.setVisible(true);
     }
 
     private void displaySignInView() {
         JFrame signInFrame = new JFrame("Sign In");
-        signInFrame.setSize(300, 200);
-        signInFrame.setLayout(new GridLayout(5, 2));
+        signInFrame.setSize(300, 200); // Keeping size consistent with main view
+        signInFrame.setLayout(new GridLayout(6, 2, 5, 5)); // Adjusted for additional slider row
 
-        JTextField usernameField = new JTextField();
-        JTextField cityField = new JTextField();
-        JTextField stateField = new JTextField();
-        JTextField countryField = new JTextField();
+        // Components
+        JLabel usernameLabel = new JLabel("Username:");
+        JTextField usernameField = new JTextField(15);
+        JLabel cityLabel = new JLabel("City:");
+        JTextField cityField = new JTextField(15);
+        JLabel stateLabel = new JLabel("State:");
+        JTextField stateField = new JTextField(15);
+        JLabel countryLabel = new JLabel("Country:");
+        JTextField countryField = new JTextField(15);
         JButton submitButton = new JButton("Submit");
+        JLabel sizeAdjustLabel = new JLabel("Adjust Size:"); // Label for slider
 
-        signInFrame.add(new JLabel("Username:"));
+        // Slider for scaling
+        JSlider scaleSlider = new JSlider(JSlider.HORIZONTAL, 10, 20, 15);
+        scaleSlider.setMajorTickSpacing(1);
+        scaleSlider.setPaintTicks(true);
+        scaleSlider.setPaintLabels(false);
+
+        // Add components to frame
+        signInFrame.add(usernameLabel);
         signInFrame.add(usernameField);
-        signInFrame.add(new JLabel("City:"));
+        signInFrame.add(cityLabel);
         signInFrame.add(cityField);
-        signInFrame.add(new JLabel("State:"));
+        signInFrame.add(stateLabel);
         signInFrame.add(stateField);
-        signInFrame.add(new JLabel("Country:"));
+        signInFrame.add(countryLabel);
         signInFrame.add(countryField);
+        signInFrame.add(sizeAdjustLabel); // Added label for slider
+        signInFrame.add(scaleSlider);
         signInFrame.add(submitButton);
+
+        // Slider Change Listener
+        scaleSlider.addChangeListener(e -> {
+            int scaleValue = scaleSlider.getValue();
+            Font newFont = new Font("SansSerif", Font.PLAIN, scaleValue);
+
+            // Update component sizes and font
+            usernameLabel.setFont(newFont);
+            usernameField.setFont(newFont);
+            cityLabel.setFont(newFont);
+            cityField.setFont(newFont);
+            stateLabel.setFont(newFont);
+            stateField.setFont(newFont);
+            countryLabel.setFont(newFont);
+            countryField.setFont(newFont);
+            submitButton.setFont(newFont);
+            sizeAdjustLabel.setFont(newFont);
+
+        });
 
         submitButton.addActionListener(e -> {
             String username = usernameField.getText().trim();
@@ -92,11 +141,31 @@ public class Main {
 
     private void displayLoginView() {
         JFrame loginFrame = new JFrame("Login");
-        loginFrame.setSize(300, 100);
+        loginFrame.setSize(300, 150); // Adjusted size to accommodate the slider
         loginFrame.setLayout(new FlowLayout());
 
+        // Components
+        JLabel usernameLabel = new JLabel("Username:");
         JTextField usernameField = new JTextField(15);
         JButton loginButton = new JButton("Login");
+
+        // Slider for resizing text and button
+        JSlider sizeSlider = new JSlider(JSlider.HORIZONTAL, 15, 20, 17); // Min, Max, Initial Value
+        sizeSlider.setMajorTickSpacing(10);
+        sizeSlider.setMinorTickSpacing(1);
+        sizeSlider.setPaintTicks(true);
+        sizeSlider.setPaintLabels(false);
+
+        // Listener for the slider
+        sizeSlider.addChangeListener(e -> {
+            int size = sizeSlider.getValue();
+            Font font = new Font("SansSerif", Font.PLAIN, size);
+
+            // Adjusting the size of text and components
+            usernameField.setFont(font);
+            loginButton.setFont(font);
+            usernameLabel.setFont(font);
+        });
 
         loginButton.addActionListener(e -> {
             String username = usernameField.getText().trim();
@@ -116,12 +185,23 @@ public class Main {
             }
         });
 
-        loginFrame.add(new JLabel("Username:"));
+        // Adding components to the frame
+        loginFrame.add(usernameLabel);
         loginFrame.add(usernameField);
         loginFrame.add(loginButton);
+        loginFrame.add(sizeSlider);  // Add the slider to the frame
 
         loginFrame.setLocationRelativeTo(null);
         loginFrame.setVisible(true);
+    }
+
+    private void adjustTextSize(boolean increase) {
+        // Adjust text size of components
+        // Example: increase or decrease the size of countryTextField
+        Font currentFont = countryTextField.getFont();
+        float newSize = currentFont.getSize() + (increase ? 2.0f : -2.0f);
+        countryTextField.setFont(currentFont.deriveFont(newSize));
+        // Repeat for other text components
     }
 
     private void storeUserInfo(String username, String city, String state, String country) {
@@ -149,57 +229,89 @@ public class Main {
         return null;
     }
 
+
     public void displayAQIView(String city, String state, String country) {
         mainFrame.getContentPane().removeAll();
         mainFrame.setLayout(new BorderLayout());
 
         JPanel panel = new JPanel(new GridLayout(0, 2));
-        countryTextField.setText(country);
-        stateTextField.setText(state);
-        cityTextField.setText(city);
+            countryTextField.setText(country);
+            stateTextField.setText(state);
+            cityTextField.setText(city);
 
-        panel.add(new JLabel("Country:"));
-        panel.add(countryTextField);
-        panel.add(new JLabel("State:"));
-        panel.add(stateTextField);
-        panel.add(new JLabel("City:"));
-        panel.add(cityTextField);
+            JLabel countryLabel = new JLabel("Country:");
+            panel.add(countryLabel);
+            panel.add(countryTextField);
 
-        String aqiStr = fetchAQI(city, state, country);
-        int aqiValue = Integer.parseInt(aqiStr);
-        JLabel resultLabel = new JLabel("AQI for " + city + ": " + aqiValue);
-        panel.add(resultLabel);
+            JLabel stateLabel = new JLabel("State:");
+            panel.add(stateLabel);
+            panel.add(stateTextField);
 
-        JButton suggestionButton = new JButton("Get Suggestion");
-        suggestionButton.addActionListener(e -> showSuggestionBasedOnAQI(aqiValue));
-        panel.add(suggestionButton);
+            JLabel cityLabel = new JLabel("City:");
+            panel.add(cityLabel);
+            panel.add(cityTextField);
 
-        mainFrame.add(panel, BorderLayout.CENTER);
+            String aqiStr = fetchAQI(city, state, country);
+            int aqiValue = Integer.parseInt(aqiStr);
+            JLabel resultLabel = new JLabel("AQI for " + city + ": " + aqiValue);
+            panel.add(resultLabel);
 
-        JPanel bottomPanel = new JPanel(new FlowLayout());
-        JButton backButton = new JButton("Back to Main");
-        backButton.addActionListener(e -> {
-            mainFrame.getContentPane().removeAll();
-            mainFrame.setLayout(new FlowLayout());
-            mainFrame.setSize(300, 100);
-            displayMainView();
-            mainFrame.revalidate();
-            mainFrame.repaint();
+            JButton suggestionButton = new JButton("Get Suggestion");
+            suggestionButton.addActionListener(e -> showSuggestionBasedOnAQI(aqiValue));
+            panel.add(suggestionButton);
+
+            mainFrame.add(panel, BorderLayout.CENTER);
+
+            // Slider for font size
+            JSlider fontSizeSlider = new JSlider(JSlider.HORIZONTAL, 8, 16, 12);
+        // Set the preferred size of the slider
+        fontSizeSlider.setPreferredSize(new Dimension(65, 50)); // Adjust width and height as needed
+            fontSizeSlider.setMajorTickSpacing(4);
+            fontSizeSlider.setPaintTicks(true);
+            fontSizeSlider.setPaintLabels(false);
+            JButton backButton = new JButton("Back to Main");
+            JButton addLocationButton = new JButton("Other locations");
+
+            fontSizeSlider.addChangeListener(e -> {
+                int fontSize = fontSizeSlider.getValue();
+                Font newFont = new Font("SansSerif", Font.PLAIN, fontSize);
+
+                countryLabel.setFont(newFont);
+                stateLabel.setFont(newFont);
+                cityLabel.setFont(newFont);
+                resultLabel.setFont(newFont);
+                countryTextField.setFont(newFont);
+                stateTextField.setFont(newFont);
+                cityTextField.setFont(newFont);
+                suggestionButton.setFont(newFont);
+                backButton.setFont(newFont);
+                addLocationButton.setFont(newFont);
+            });
+
+            JPanel bottomPanel = new JPanel(new FlowLayout());
+            bottomPanel.add(fontSizeSlider);
+
+            backButton.addActionListener(e -> {
+                mainFrame.getContentPane().removeAll();
+                mainFrame.setLayout(new FlowLayout());
+                mainFrame.setSize(300, 100);
+                displayMainView();
+                mainFrame.revalidate();
+                mainFrame.repaint();
+                mainFrame.setLocationRelativeTo(null);
+            });
+            bottomPanel.add(backButton);
+
+            styleButton(addLocationButton);
+            addLocationButton.addActionListener(e -> displayGUI());
+            bottomPanel.add(addLocationButton);
+
+            mainFrame.add(bottomPanel, BorderLayout.PAGE_END);
+
+            mainFrame.pack();
             mainFrame.setLocationRelativeTo(null);
-        });
-        bottomPanel.add(backButton);
-
-        JButton addLocationButton = new JButton("Other locations");
-        styleButton(addLocationButton);
-        addLocationButton.addActionListener(e -> displayGUI());
-        bottomPanel.add(addLocationButton);
-
-        mainFrame.add(bottomPanel, BorderLayout.PAGE_END);
-
-        mainFrame.pack();
-        mainFrame.setLocationRelativeTo(null);
-        mainFrame.setVisible(true);
-    }
+            mainFrame.setVisible(true);
+        }
 
     private void showSuggestionBasedOnAQI(int aqi) {
         AirQuality airQuality = new AirQuality(aqi);
