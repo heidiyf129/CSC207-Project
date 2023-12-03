@@ -22,6 +22,9 @@ public class UserDao {
         // Replace this with a database query in a real application
         return users.get(username);
     }
+    public void addUser(User user) {
+        users.put(user.getUsername(), user);
+    }
 
     // Additional methods for updating, deleting, etc. could be added here.
 }

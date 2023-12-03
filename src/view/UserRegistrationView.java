@@ -1,6 +1,7 @@
 package view;
 
 import interface_adapter.UserController;
+import javax.swing.*;
 import java.util.Scanner;
 
 public class UserRegistrationView {
@@ -14,34 +15,40 @@ public class UserRegistrationView {
     }
 
     public void showRegistrationForm() {
-        System.out.println("Please enter the desired username:");
-        String username = scanner.nextLine();
+        boolean isRegistered = false;
 
-        System.out.println("Please enter your password:");
-        String password = scanner.nextLine();
+        // Variables for user input
+        String locationName;
+        double latitude;
+        double longitude;
 
-        System.out.println("Please enter your location name:");
-        String locationName = scanner.nextLine();
+        while (!isRegistered) {
+            System.out.println("Please enter the desired username:");
+            String username = scanner.nextLine();
 
-        System.out.println("Please enter the latitude of your location:");
-        double latitude = scanner.nextDouble();
+            if (!userController.isUsernameUnique(username)) {
+                // Show warning if username is not unique
+                JOptionPane.showMessageDialog(null, "Username already taken. Please choose a different username.", "Username Taken", JOptionPane.WARNING_MESSAGE);
+                continue; // Skip the rest of the loop and prompt for the username again
+            }
 
-        System.out.println("Please enter the longitude of your location:");
-        double longitude = scanner.nextDouble();
+            // Collect additional user details
+            System.out.println("Please enter your location name:");
+            locationName = scanner.nextLine();
 
-        // Consume the remaining newline
-        scanner.nextLine();
+            System.out.println("Please enter the latitude of your location:");
+            latitude = Double.parseDouble(scanner.nextLine());
 
-        // Attempt to register the user with the collected information
-        boolean isRegistered = userController.register(username, password, locationName, latitude, longitude);
+            System.out.println("Please enter the longitude of your location:");
+            longitude = Double.parseDouble(scanner.nextLine());
 
-        if (isRegistered) {
-            System.out.println("Registration successful for user: " + username);
-        } else {
-            System.out.println("Registration failed. Username might already be taken.");
+            // Attempt to register the user
+            isRegistered = userController.register(username, locationName, latitude, longitude);
+            if (isRegistered) {
+                System.out.println("Registration successful for user: " + username);
+            } else {
+                System.out.println("Registration failed. Please try again.");
+            }
         }
-
-        // Additional logic for handling other aspects of the registration process
-        // and interacting with the user can be added here.
     }
 }

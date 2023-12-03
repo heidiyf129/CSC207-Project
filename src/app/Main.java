@@ -43,10 +43,10 @@ public class Main {
     public void displayMainView() {
         mainFrame.setLayout(new FlowLayout());
 
-        JButton signInButton = new JButton("Sign In");
+        JButton signUpButton = new JButton("Sign up");
         JButton loginButton = new JButton("Login");
 
-        signInButton.addActionListener(e -> displaySignInView());
+        signUpButton.addActionListener(e -> displaySignInView());
         loginButton.addActionListener(e -> displayLoginView());
 
         // Create a slider for adjusting button size
@@ -59,11 +59,11 @@ public class Main {
         sizeSlider.addChangeListener(e -> {
             int sliderValue = sizeSlider.getValue();
             // Adjust the size of the buttons based on the slider value
-            signInButton.setFont(new Font("SansSerif", Font.PLAIN, sliderValue));
+            signUpButton.setFont(new Font("SansSerif", Font.PLAIN, sliderValue));
             loginButton.setFont(new Font("SansSerif", Font.PLAIN, sliderValue));
         });
 
-        mainFrame.add(signInButton);
+        mainFrame.add(signUpButton);
         mainFrame.add(loginButton);
         mainFrame.add(sizeSlider); // Add the slider to the frame
 
@@ -168,7 +168,15 @@ public class Main {
         });
 
         loginButton.addActionListener(e -> {
+            System.out.println("Login button clicked"); // Debug statement
+
             String username = usernameField.getText().trim();
+            if (username.isEmpty()) {
+                JOptionPane.showMessageDialog(loginFrame, "Username cannot be empty.",
+                        "Login Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
             String[] location = getUserLocation(username);
             if (location != null && location.length == 3) {
                 loginFrame.dispose();
@@ -294,7 +302,7 @@ public class Main {
             backButton.addActionListener(e -> {
                 mainFrame.getContentPane().removeAll();
                 mainFrame.setLayout(new FlowLayout());
-                mainFrame.setSize(300, 100);
+                mainFrame.setSize(300, 200);
                 displayMainView();
                 mainFrame.revalidate();
                 mainFrame.repaint();

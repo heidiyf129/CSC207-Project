@@ -5,28 +5,21 @@ import entity.User;
 import entity.UserLocation;
 
 public class RegisterUser {
-
     private UserDao userDao;
 
     public RegisterUser(UserDao userDao) {
         this.userDao = userDao;
     }
 
-    public boolean execute(String username, String locationName, String name, double latitude, double longitude) {
+    public boolean execute(String username, String locationName, double latitude, double longitude) throws UsernameNotUniqueException {
         // Check if the username is unique
         if (userDao.isUsernameUnique(username)) {
-            // Create a new UserLocation instance
-            UserLocation location = new UserLocation(locationName, latitude, longitude);
-
-            // Create a new User instance
-            User user = new User(username, location);
-
-            // Persist the new user
-            userDao.save(user);
-
-            return true; // Registration successful
-        } else {
-            return false; // Username not unique, registration failed
+            // Create a new user and add it to the UserDao
+            UserLocation userLocation = new UserLocation(locationName, latitude, longitude);
+            User newUser = new User(username, userLocation);
+            userDao.addUser(newUser);
+            return true; // Registration is successful
         }
+        return false; // Username is not unique
     }
 }
