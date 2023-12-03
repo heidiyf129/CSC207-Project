@@ -1,13 +1,14 @@
 package data_access;
-
 import entity.User;
-import java.util.HashMap;
-import java.util.Map;
+import use_case.AnalyzeAirQuality;
+
+import javax.swing.*;
+import java.io.*;
+import java.util.*;
 
 public class UserDao {
     // This is a simple in-memory store. Replace with real database access logic.
     private Map<String, User> users = new HashMap<>();
-
 
     public boolean isUsernameUnique(String username) {
         return !users.containsKey(username);
@@ -22,9 +23,8 @@ public class UserDao {
         // Replace this with a database query in a real application
         return users.get(username);
     }
+  
     public void addUser(User user) {
         users.put(user.getUsername(), user);
     }
-
-    // Additional methods for updating, deleting, etc. could be added here.
 }
