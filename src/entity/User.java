@@ -7,7 +7,6 @@ public class User {
 
     public User(String username, UserLocation location) {
         this.username = username;
-        this.hashedPassword = hashedPassword; // Save the hashed password
         this.location = location;
     }
 
@@ -26,12 +25,6 @@ public class User {
 
     public void setLocation(UserLocation location) {
         this.location = location;
-    }
-    public String getHashedPassword() {
-        return hashedPassword;
-    }
-    public void setHashedPassword(String hashedPassword) {
-        this.hashedPassword = hashedPassword;
     }
 
     public String getAqiInfo() {

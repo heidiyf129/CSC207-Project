@@ -38,7 +38,12 @@
             <artifactId>javafx-fxml</artifactId>
             <version>17</version> <!-- Use the version that is compatible with your project -->
         </dependency>
-
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 
