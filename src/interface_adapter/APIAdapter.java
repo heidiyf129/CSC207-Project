@@ -1,10 +1,14 @@
 package interface_adapter;
-import java.util.Properties;
-import java.io.InputStream;
-import java.io.IOException;
 
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import org.json.JSONObject;
-import okhttp3.*;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 public class APIAdapter implements data_access.AirQualityDao {
     private static String API_KEY;
