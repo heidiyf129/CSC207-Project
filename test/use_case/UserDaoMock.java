@@ -7,25 +7,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class UserDaoMock extends UserDao {
-    private Map<String, User> mockusers = new HashMap<>();
+    private final Map<String, User> mockUsers = new HashMap<>();
 
     @Override
     public User findByUsername(String username) {
-        return mockusers.get(username);
+        return mockUsers.get(username);
     }
 
     @Override
     public void save(User user) {
-        mockusers.put(user.getUsername(), user); // Corrected here
+        mockUsers.put(user.getUsername(), user);
     }
 
-    @Override
     public void addUser(User user) {
-        mockusers.put(user.getUsername(), user);
+        mockUsers.put(user.getUsername(), user);
     }
 
     @Override
     public boolean isUsernameUnique(String username) {
-        return !mockusers.containsKey(username);
+        return !mockUsers.containsKey(username);
     }
 }

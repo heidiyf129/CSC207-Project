@@ -5,10 +5,9 @@ import entity.User;
 
 
 public class LoginUser {
+    private final UserDao userDao;
 
-    private UserDao userDao;
-
-    public LoginUser() {
+    public LoginUser(UserDao userDao) {
         this.userDao = userDao;
     }
 
