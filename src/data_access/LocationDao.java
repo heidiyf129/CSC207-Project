@@ -1,6 +1,8 @@
 package data_access;
 
 import entity.Location;
+import entity.UserLocation;
+
 import java.util.List;
 
 public interface LocationDao {

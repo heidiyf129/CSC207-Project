@@ -9,7 +9,6 @@ public class AirQualityController {
         this.airQualityDao = airQualityDao;
     }
 
-    // Existing method to fetch air quality data as a String
     public String fetchAirQuality(String city, String state, String country) {
         return airQualityDao.fetchAirQualityData(city, state, country);
     }
