@@ -2,14 +2,13 @@ package use_case;
 
 import data_access.UserDao;
 import entity.User;
-import java.util.Objects;
 
 
 public class LoginUser {
 
     private UserDao userDao;
 
-    public LoginUser(UserDao userDao) {
+    public LoginUser() {
         this.userDao = userDao;
     }
 
