@@ -11,12 +11,11 @@ public class RegisterUser {
         this.userDao = userDao;
     }
 
-    public RegisterUser() {
-
-    }
-
     public boolean execute(String username, String locationName, double latitude, double longitude) throws UsernameNotUniqueException {
         // Check if the username is unique
+        if (!userDao.isUsernameUnique(username)) {
+            throw new UsernameNotUniqueException("Username is not unique");
+        }
         if (userDao.isUsernameUnique(username)) {
             // Create a new user and add it to the UserDao
             UserLocation userLocation = new UserLocation(locationName, latitude, longitude);

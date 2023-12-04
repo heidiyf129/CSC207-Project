@@ -64,10 +64,46 @@ public class AnalyzeAirQualityTest {
 
     @Test
     public void testAnalyzeWithLongTips() {
-        AnalyzeAirQuality analyzer = new AnalyzeAirQuality();
-        AirQuality airQuality = new AirQuality(200); // Assume this will produce a long tips string
+        AnalyzeAirQuality analyzer = new AnalyzeAirQuality() {
+            @Override
+            public String getAirQuality(int aqi) {
+                // Return a long string to test the formatting
+                return "This is a very long suggestion string that should be wrapped correctly by the formatTipsForDisplay method to ensure that it is displayed properly in the user interface without exceeding the maximum line width.";
+            }
+        };
+        AirQuality airQuality = new AirQuality(200); // Sample AQI value
+
         String analysis = analyzer.analyze(airQuality);
-        // Assertions to check if the line wrapping occurs
+        assertNotNull(analysis);
+        // Assertions to check if the line wrapping occurs correctly
     }
+    @Test
+    public void testAnalyzeWithAPIError() {
+        AnalyzeAirQuality analyzer = new AnalyzeAirQuality() {
+            @Override
+            public String getAirQuality(int aqi) {
+                // Simulate an API error
+                return "Unable to retrieve tips: API error";
+            }
+        };
+        AirQuality airQuality = new AirQuality(300); // Sample AQI value
+
+        String analysis = analyzer.analyze(airQuality);
+        assertNotNull(analysis);
+        assertTrue(analysis.contains("Unable to retrieve tips: API error"));
+    }
+    @Test
+    public void testAnalyzeWithExtremeAQI() {
+        AnalyzeAirQuality analyzer = new AnalyzeAirQuality();
+        AirQuality airQuality = new AirQuality(500); // Extreme AQI value
+
+        String analysis = analyzer.analyze(airQuality);
+        assertNotNull(analysis);
+        assertTrue(analysis.startsWith("Hazardous\n\nSuggestions: "));
+        // Additional assertions
+    }
+
+
+
 }
 
