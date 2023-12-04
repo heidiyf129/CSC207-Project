@@ -28,8 +28,17 @@ public class APIAdapter implements data_access.AirQualityDao {
 
     @Override
     public Integer getAqi(String city, String state, String country) {
-        return null;
+        String aqiString = fetchAirQualityData(city, state, country);
+        try {
+            // If the API call is successful and the response contains a numeric AQI, it will be parsed.
+            // If the response contains a message or is not a number, it will throw an exception caught by the catch block.
+            return Integer.parseInt(aqiString);
+        } catch (NumberFormatException e) {
+            // This catch block handles the case where the AQI data is not available or the API response is not a number.
+            return null;
+        }
     }
+
 
     @Override
     public String fetchAirQualityData(String city, String state, String country) {
