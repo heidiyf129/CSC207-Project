@@ -28,21 +28,22 @@ public class LoginViewTest {
         JSlider sizeSlider = (JSlider) getPrivateField(loginView, "sizeSlider");
         JTextField usernameField = (JTextField) getPrivateField(loginView, "usernameField");
 
-        // Change the slider value
-        sizeSlider.setValue(18); // Set to a value different from the default
+        // Manually set the slider value
+        sizeSlider.setValue(18);
 
-        // Trigger the change listener
-        sizeSlider.fireStateChanged();
+        // Manually invoke the change listener
+        // Assuming 'adjustComponentSizes' is the method attached to the slider's change listener
+        loginView.adjustComponentSizes();
 
         // Check if the font size of the username field is updated
         assertEquals("Font size should be updated", 18, usernameField.getFont().getSize());
     }
 
+
     @Test
     public void testLoginActionWithValidUsername() throws Exception {
-        // Setup
         JTextField usernameField = (JTextField) getPrivateField(loginView, "usernameField");
-        JButton loginButton = findButton(loginView.getFrame(), "Login");
+        JButton loginButton = (JButton) getPrivateField(loginView, "loginButton");
 
         // Set a valid username
         usernameField.setText("validUsername");
@@ -51,14 +52,12 @@ public class LoginViewTest {
         simulateButtonClick(loginButton);
 
         // Add assertions to check the expected behavior
-        // e.g., frame should be closed, MainView should display something
     }
 
     @Test
     public void testLoginActionWithInvalidUsername() throws Exception {
-        // Setup
         JTextField usernameField = (JTextField) getPrivateField(loginView, "usernameField");
-        JButton loginButton = findButton(loginView.getFrame(), "Login");
+        JButton loginButton = (JButton) getPrivateField(loginView, "loginButton");
 
         // Set an invalid username
         usernameField.setText("");
@@ -67,8 +66,8 @@ public class LoginViewTest {
         simulateButtonClick(loginButton);
 
         // Add assertions to check for error dialog
-        // This might be challenging without a mocking framework
     }
+
 
     private void simulateButtonClick(JButton button) {
         ActionEvent event = new ActionEvent(button, ActionEvent.ACTION_PERFORMED, button.getActionCommand());

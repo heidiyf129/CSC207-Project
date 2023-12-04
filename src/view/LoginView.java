@@ -8,7 +8,8 @@ public class LoginView {
     private JFrame frame;
     private JTextField usernameField;
     private JSlider sizeSlider;
-    private MainView mainView; // Reference to MainView
+    private JButton loginButton; // Store loginButton as a class member
+    private MainView mainView;
 
     public LoginView(MainView mainView) {
         this.mainView = mainView;
@@ -22,7 +23,7 @@ public class LoginView {
 
         usernameField = new JTextField(15);
 
-        JButton loginButton = new JButton("Login");
+        loginButton = new JButton("Login"); // Initialize loginButton
         loginButton.addActionListener(e -> loginAction());
 
 
@@ -41,7 +42,7 @@ public class LoginView {
         frame.add(sizeSlider);
     }
 
-    private void adjustComponentSizes() {
+    protected void adjustComponentSizes() {
         int size = sizeSlider.getValue();
         Font font = new Font("SansSerif", Font.PLAIN, size);
         usernameField.setFont(font);
