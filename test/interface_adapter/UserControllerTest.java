@@ -24,8 +24,8 @@ public class UserControllerTest {
         registerUser = new RegisterUser(userDao) {
             // Override the methods of RegisterUser for testing
         };
-        loginUser = new LoginUser() {
-            // Override the methods of LoginUser for testing
+        loginUser = new LoginUser(userDao) { // Pass userDao to the constructor
+            // Override the methods of LoginUser for testing, if necessary
         };
         userController = new UserController(registerUser, loginUser, userDao);
     }
