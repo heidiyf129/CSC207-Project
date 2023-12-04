@@ -26,6 +26,7 @@ public class MainView {
     private final AnalyzeAirQuality analyzer = new AnalyzeAirQuality();
 
     public MainView() {
+        mainFrame = new JFrame();
         mainFrame = new JFrame("Air Quality Application");
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setSize(300, 100);
@@ -34,8 +35,12 @@ public class MainView {
         stateTextField = new JTextField(15);
         cityTextField = new JTextField(15);
     }
+    public JFrame getFrame() {
+        return mainFrame;
+    }
 
     public void displayMainView() {
+
         mainFrame.getContentPane().removeAll();
         mainFrame.setLayout(new FlowLayout());
 
@@ -130,7 +135,9 @@ public class MainView {
         AirQuality airQuality = new AirQuality(aqi);
         String analysis = analyzer.analyze(airQuality);
         JOptionPane.showMessageDialog(mainFrame, analysis, "Suggestion", JOptionPane.INFORMATION_MESSAGE);
+        // Assuming AQIView has a method to bring its frame to focus
     }
+
 
     public static String fetchAQI(String city, String state, String country) {
         // Your implementation of fetching the AQI from the API

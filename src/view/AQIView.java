@@ -74,10 +74,22 @@ public class AQIView {
             JOptionPane.showMessageDialog(frame, "Invalid AQI value.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+
     private void goBackToMainView() {
-        frame.dispose(); // Close the AQI view
-        mainView.displayMainView(); // Display the main view of the application
+        // Close the AQI view
+        frame.dispose();
+
+        // Close all other windows except the main window
+        for (Window window : Window.getWindows()) {
+            if (window != mainView.getFrame() && window.isShowing()) {
+                window.dispose();
+            }
+        }
+
+        // Display the main view of the application
+        mainView.displayMainView();
     }
+
     private void showAQICompareView() {
         mainView.displayGUI();
     }
