@@ -14,12 +14,11 @@ public class UserController {
     private final UserDao userDao;
     private final UserPresenter userPresenter; // Add UserPresenter
 
-    // Constructor with UserPresenter
-    public UserController(RegisterUser registerUser, LoginUser loginUser, UserDao userDao, UserPresenter userPresenter) {
+    // Dependency injection of use cases and UserDao
+    public UserController(RegisterUser registerUser, LoginUser loginUser, UserDao userDao) {
         this.registerUser = registerUser;
         this.loginUser = loginUser;
-        this.userDao = userDao;
-        this.userPresenter = userPresenter; // Initialize UserPresenter
+        this.userDao = userDao; // Initialize userDao here
     }
 
     // Method to handle user registration
@@ -43,20 +42,6 @@ public class UserController {
             return userPresenter.presentLoginSuccess(user);
         } catch (Exception e) {
             return userPresenter.presentLoginFailure(username);
-        }
-    }
-
-    // Method to display AQI information after login
-    public String displayAQIForUser(String username, String password) {
-        try {
-            User user = loginUser.execute(username, password);
-            if (user != null) {
-                return user.getAqiInfo();
-            } else {
-                return "User not found or AQI information is unavailable.";
-            }
-        } catch (Exception e) {
-            return "Error occurred: " + e.getMessage();
         }
     }
 }
