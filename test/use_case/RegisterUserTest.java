@@ -31,14 +31,13 @@ public class RegisterUserTest {
     }
 
 
-    @Test
+    @Test(expected = UsernameNotUniqueException.class)
     public void testRegistrationWithNonUniqueUsername() throws UsernameNotUniqueException {
         String username = "existinguser";
         User existingUser = new User(username, new UserLocation("ExistingLocation", 10.0, 20.0));
         userDaoMock.addUser(existingUser);
 
-        boolean result = registerUser.execute(username, "NewLocation", 15.0, 25.0);
-
-        assertFalse(result);
+        // This should throw UsernameNotUniqueException
+        registerUser.execute(username, "NewLocation", 15.0, 25.0);
     }
 }

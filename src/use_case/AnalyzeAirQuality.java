@@ -59,10 +59,7 @@ public class AnalyzeAirQuality {
             String responseBody = response.body().string();
 
             JSONObject jsonObject = new JSONObject(responseBody);
-            String content = jsonObject.getJSONArray("choices")
-                    .getJSONObject(0)
-                    .getJSONObject("message")
-                    .getString("content");
+            String content = jsonObject.getJSONArray("choices").getJSONObject(0).getJSONObject("message").getString("content");
 
             return content;
         } catch (Exception e) {

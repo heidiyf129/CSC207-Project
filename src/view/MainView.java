@@ -1,20 +1,21 @@
 package view;
 
-        import entity.AirQuality;
-        import interface_adapter.APIAdapter;
-        import interface_adapter.AirQualityController;
-        import use_case.AnalyzeAirQuality;
+import entity.AirQuality;
+import interface_adapter.APIAdapter;
+import interface_adapter.AirQualityController;
+import use_case.AnalyzeAirQuality;
 
-        import javax.swing.*;
-        import javax.swing.border.EmptyBorder;
-        import java.awt.*;
-        import java.awt.event.ActionEvent;
-        import java.io.*;
-        import java.util.ArrayList;
-        import java.util.Arrays;
-        import java.util.List;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class MainView {
+    private JButton signUpButton;
     private JFrame mainFrame;
     private static JFrame frame;
     private JPanel panel;
@@ -27,9 +28,11 @@ public class MainView {
 
     public MainView() {
         mainFrame = new JFrame();
+        signUpButton = new JButton("Sign Up");
         mainFrame = new JFrame("Air Quality Application");
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setSize(300, 100);
+
 
         countryTextField = new JTextField(15);
         stateTextField = new JTextField(15);
