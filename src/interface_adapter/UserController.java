@@ -33,10 +33,4 @@ public class UserController {
     public boolean isUsernameUnique(String username) {
         return userDao.isUsernameUnique(username);
     }
-
-    // Method to handle user login
-    public User login(String username, String password) throws Exception {
-        // Ensure that the execute method in LoginUser accepts these parameters
-        return loginUser.execute(username, password);
-    }
 }
