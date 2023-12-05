@@ -58,14 +58,7 @@ public class SignUpView {
         countryField.setFont(newFont);
     }
 
-    private void submitAction() {
-        String username = usernameField.getText().trim();
-        String city = cityField.getText().trim();
-        String state = stateField.getText().trim();
-        String country = countryField.getText().trim();
-
-        mainView.storeUserInfo(username, city, state, country);
-        frame.dispose();
+    private void submitAction() {String username = usernameField.getText().trim();String city = cityField.getText().trim();String state = stateField.getText().trim();String country = countryField.getText().trim();mainView.storeUserInfo(username, city, state, country);frame.dispose();
     }
 
     public void display() {

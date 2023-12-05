@@ -62,7 +62,6 @@ public class MainView {
         // Add change listener to the slider
         sizeSlider.addChangeListener(e -> {
             int sliderValue = sizeSlider.getValue();
-            // Adjust the size of the buttons based on the slider value
             signUpButton.setFont(new Font("SansSerif", Font.PLAIN, sliderValue));
             loginButton.setFont(new Font("SansSerif", Font.PLAIN, sliderValue));
         });
@@ -95,8 +94,7 @@ public class MainView {
             AQIView aqiView = new AQIView(this); // Pass 'this' to reference MainView
             aqiView.display(city, state, country, aqiValue);
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(mainFrame, "Error fetching AQI: " + e.getMessage(), "AQI Error", JOptionPane.ERROR_MESSAGE);
-        }
+            JOptionPane.showMessageDialog(mainFrame, "Error fetching AQI: " + e.getMessage(), "AQI Error", JOptionPane.ERROR_MESSAGE);}
     }
 
 
@@ -105,8 +103,7 @@ public class MainView {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("users.txt", true))) {
             writer.write(username + "," + city + "," + state + "," + country);
             writer.newLine();
-        } catch (IOException ex) {
-            JOptionPane.showMessageDialog(mainFrame, "Error storing user info: " + ex.getMessage(),
+        } catch (IOException ex) {JOptionPane.showMessageDialog(mainFrame, "Error storing user info: " + ex.getMessage(),
                     "File Error", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -128,8 +125,7 @@ public class MainView {
                     return Arrays.copyOfRange(parts, 1, parts.length); // city, state, country
                 }
             }
-        } catch (IOException ex) {
-            JOptionPane.showMessageDialog(mainFrame, "Error reading user info: " + ex.getMessage(), "File Error", JOptionPane.ERROR_MESSAGE);
+        } catch (IOException ex) {JOptionPane.showMessageDialog(mainFrame, "Error reading user info: " + ex.getMessage(), "File Error", JOptionPane.ERROR_MESSAGE);
         }
         return null;
     }
@@ -235,48 +231,18 @@ public class MainView {
         openLocationInputDialog();
     }
 
-    private void openLocationInputDialog() {
-        JDialog inputDialog = new JDialog(frame, "Enter Location", true);
-        inputDialog.setLayout(new BoxLayout(inputDialog.getContentPane(), BoxLayout.Y_AXIS));
-
-        JTextField cityTextField = new JTextField(10);
-        JTextField stateTextField = new JTextField(10);
-        JTextField countryTextField = new JTextField(10);
-
-        // Add the Country label and text field
-        JPanel countryPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        countryPanel.add(new JLabel("Country:"));
-        countryPanel.add(countryTextField);
-        inputDialog.add(countryPanel);
-
-        // Add the State label and text field
-        JPanel statePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        statePanel.add(new JLabel("    State:"));
-        statePanel.add(stateTextField);
-        inputDialog.add(statePanel);
-
-        // Add the City label and text field
-        JPanel cityPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        cityPanel.add(new JLabel("     City:"));
-        cityPanel.add(cityTextField);
-        inputDialog.add(cityPanel);
-
-        JButton submitButton = new JButton("Submit");
-        styleButton(submitButton);
+    private void openLocationInputDialog() {JDialog inputDialog = new JDialog(frame, "Enter Location", true);inputDialog.setLayout(new BoxLayout(inputDialog.getContentPane(), BoxLayout.Y_AXIS));JTextField cityTextField = new JTextField(10);JTextField stateTextField = new JTextField(10);JTextField countryTextField = new JTextField(10);JPanel countryPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));countryPanel.add(new JLabel("Country:"));countryPanel.add(countryTextField);inputDialog.add(countryPanel);JPanel statePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));statePanel.add(new JLabel("    State:"));statePanel.add(stateTextField);inputDialog.add(statePanel);JPanel cityPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));cityPanel.add(new JLabel("     City:"));cityPanel.add(cityTextField);inputDialog.add(cityPanel);JButton submitButton = new JButton("Submit");styleButton(submitButton);
         submitButton.addActionListener(e -> {
             String city = cityTextField.getText().trim();
             String state = stateTextField.getText().trim();
             String country = countryTextField.getText().trim();
 
-            if (!city.isEmpty() && !state.isEmpty() && !country.isEmpty()) {
-                int aqiValue = Integer.parseInt(fetchAQI(city, state, country));
+            if (!city.isEmpty() && !state.isEmpty() && !country.isEmpty()) {int aqiValue = Integer.parseInt(fetchAQI(city, state, country));
                 locations.add(String.format("%s, %s, %s", city, state, country));
                 aqis.add(aqiValue);
                 updateSuggestionArea();
-            } else {
-                JOptionPane.showMessageDialog(inputDialog, "Please fill in all the details.", "Input Error", JOptionPane.ERROR_MESSAGE);
-            }
-            inputDialog.dispose();
+            } else {JOptionPane.showMessageDialog(inputDialog, "Please fill in all the details.", "Input Error", JOptionPane.ERROR_MESSAGE);
+            }inputDialog.dispose();
         });
 
         inputDialog.add(submitButton);
@@ -284,62 +250,25 @@ public class MainView {
         inputDialog.setLocationRelativeTo(frame); // Center dialog relative to the main frame
         inputDialog.setVisible(true);
 
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        buttonPanel.add(submitButton);
-        inputDialog.add(buttonPanel);
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));buttonPanel.add(submitButton);inputDialog.add(buttonPanel);
 
-        submitButton.addActionListener(e -> {
-            String city = cityTextField.getText().trim();
-            String state = stateTextField.getText().trim();
-            String country = countryTextField.getText().trim();
+        submitButton.addActionListener(e -> {String city = cityTextField.getText().trim();String state = stateTextField.getText().trim();String country = countryTextField.getText().trim();
 
-            if (!city.isEmpty() && !state.isEmpty() && !country.isEmpty()) {
-                int aqiValue = Integer.parseInt(fetchAQI(city, state, country));
-                this.locations.add(String.format("%s, %s, %s", city, state, country));
-                aqis.add(aqiValue);
-                updateSuggestionArea();
-
-                // Store the new location in the user's account
-                storeUserInfo(currentUsername, city, state, country);
-            } else {
-                JOptionPane.showMessageDialog(inputDialog, "Please fill in all the details.", "Input Error", JOptionPane.ERROR_MESSAGE);
-            }
-            inputDialog.dispose();
+            if (!city.isEmpty() && !state.isEmpty() && !country.isEmpty()) {int aqiValue = Integer.parseInt(fetchAQI(city, state, country));this.locations.add(String.format("%s, %s, %s", city, state, country));aqis.add(aqiValue);updateSuggestionArea();storeUserInfo(currentUsername, city, state, country);
+            } else {JOptionPane.showMessageDialog(inputDialog, "Please fill in all the details.", "Input Error", JOptionPane.ERROR_MESSAGE);
+            }inputDialog.dispose();
         });
     }
 
-    private void updateSuggestionArea() {
-        suggestionPanel.removeAll();
+    private void updateSuggestionArea() {suggestionPanel.removeAll();
 
-        for (int i = 0; i < locations.size(); i++) {
-            String location = locations.get(i);
-            int aqi = aqis.get(i);
-
-            JLabel locationLabel = new JLabel(location + " - AQI: " + aqi);
-            JButton suggestionButton = new JButton("Suggestion");
-            styleButton(suggestionButton);
-            int index = i;
-            suggestionButton.addActionListener(e -> showSuggestion(index));
-
-            JPanel locationPanel = new JPanel();
-            locationPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-            locationPanel.setBackground(new Color(230, 230, 250));
-            locationPanel.add(locationLabel);
-            locationPanel.add(suggestionButton);
-
-            suggestionPanel.add(locationPanel);
-        }
-
-        suggestionPanel.revalidate();
-        suggestionPanel.repaint();
+        for (int i = 0; i < locations.size(); i++) {String location = locations.get(i);
+            int aqi = aqis.get(i);JLabel locationLabel = new JLabel(location + " - AQI: " + aqi);JButton suggestionButton = new JButton("Suggestion");styleButton(suggestionButton);int index = i;suggestionButton.addActionListener(e -> showSuggestion(index));JPanel locationPanel = new JPanel();locationPanel.setLayout(new FlowLayout(FlowLayout.LEFT));locationPanel.setBackground(new Color(230, 230, 250));locationPanel.add(locationLabel);locationPanel.add(suggestionButton);suggestionPanel.add(locationPanel);
+        }suggestionPanel.revalidate();suggestionPanel.repaint();
     }
 
     private void showSuggestion(int index) {
-        if (index >= 0 && index < locations.size()) {
-            int aqi = aqis.get(index);
-            AirQuality airQuality = new AirQuality(aqi);
-            String analysis = analyzer.analyze(airQuality);
-            JOptionPane.showMessageDialog(frame, analysis, "Suggestion for " + locations.get(index), JOptionPane.INFORMATION_MESSAGE);
+        if (index >= 0 && index < locations.size()) {int aqi = aqis.get(index);AirQuality airQuality = new AirQuality(aqi);String analysis = analyzer.analyze(airQuality);JOptionPane.showMessageDialog(frame, analysis, "Suggestion for " + locations.get(index), JOptionPane.INFORMATION_MESSAGE);
         }
     }
 }
