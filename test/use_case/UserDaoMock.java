@@ -14,11 +14,6 @@ public class UserDaoMock extends UserDao {
         return mockUsers.get(username);
     }
 
-    @Override
-    public void save(User user) {
-        mockUsers.put(user.getUsername(), user);
-    }
-
     public void addUser(User user) {
         mockUsers.put(user.getUsername(), user);
     }

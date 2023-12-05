@@ -27,7 +27,12 @@
             <artifactId>okhttp</artifactId>
             <version>4.10.0</version>
         </dependency>
-
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.29</version> <!-- Use the latest version available -->
+            <scope>runtime</scope>
+        </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
@@ -37,6 +42,12 @@
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
             <version>17</version> <!-- Use the version that is compatible with your project -->
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>4.6.1</version> <!-- Use the latest version available -->
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
