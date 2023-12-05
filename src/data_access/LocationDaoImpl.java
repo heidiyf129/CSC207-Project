@@ -1,6 +1,5 @@
 package data_access;
 
-import entity.AirQuality;
 import entity.Location;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,13 +9,8 @@ public class LocationDaoImpl implements LocationDao {
     private Connection connection;
 
     // Constructor
-    public LocationDaoImpl() {
-        // Example connection setup
-        try {
-            this.connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/yourDatabase", "username", "password");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public LocationDaoImpl(Connection mockConnection) throws SQLException {
+        this.connection = mockConnection;
     }
 
     @Override
