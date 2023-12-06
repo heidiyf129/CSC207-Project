@@ -14,16 +14,10 @@ public class UserDao {
         return !users.containsKey(username);
     }
 
-    public void save(User user) {
-        // Ideally, here you would use a database to save the user info
-        users.put(user.getUsername(), user);
-    }
-
     public User findByUsername(String username) {
         // Replace this with a database query in a real application
         return users.get(username);
     }
-  
     public void addUser(User user) {
         users.put(user.getUsername(), user);
     }
